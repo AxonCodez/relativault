@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 import json
 import os
+import time
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -14,28 +15,41 @@ def index():
     session['streak'] = session.get('streak', 0)
     return render_template('index.html', streak=session['streak'])
 
-@app.route('/quiz/<int:qid>')
-def quiz(qid):
-    if qid < 1 or qid > len(questions):
-        return redirect('/')
-    session['streak'] = session.get('streak', 0)
-    return render_template('quiz.html', question=questions[qid-1])
+@app.route('/questions')
+def show_questions():
+    session['start_time'] = time.time()  # Start the timer
+    session['answers'] = {}              # Store user answers
+    return render_template('questions.html', questions=questions)
 
 @app.route('/submit', methods=['POST'])
-def submit_answer():
-    qid = int(request.form['qid']) - 1
-    selected = int(request.form['answer'])
-    is_correct = (selected == questions[qid]['answer'])
-    if is_correct:
-        session['streak'] = session.get('streak', 0) + 1
-    else:
-        session['streak'] = 0
-    next_qid = qid + 2 if qid + 1 < len(questions) else None
-    return jsonify({
-        "correct": is_correct,
-        "streak": session['streak'],
-        "next": next_qid
-    })
+def submit_answers():
+    end_time = time.time()
+    start_time = session.get('start_time', end_time)
+    total_time = int(end_time - start_time)
+
+    user_answers = request.form.to_dict()
+    correct = 0
+    streak = 0
+    max_streak = 0
+
+    for qid, answer in user_answers.items():
+        qid = int(qid.replace('q', ''))
+        if qid <= len(questions):
+            question = questions[qid-1]
+            if int(answer) == question['answer']:
+                correct += 1
+                streak += 1
+                if streak > max_streak:
+                    max_streak = streak
+            else:
+                streak = 0
+
+    session['streak'] = max_streak
+    return render_template('results.html', 
+                          correct=correct, 
+                          total=len(questions),
+                          time=total_time,
+                          streak=max_streak)
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
@@ -51,7 +65,7 @@ def admin():
                     request.form['opt4']
                 ],
                 "answer": int(request.form['correct']),
-                "time_limit": int(request.form['time_limit']),
+                "time_limit": 0,  # Not used in this flow
                 "category": request.form['category']
             }
             questions.append(new_question)

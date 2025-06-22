@@ -92,3 +92,21 @@ body.light {
     margin-top: 1rem;
     text-align: center;
 }
+
+.question {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+.question h3 {
+    margin-top: 0;
+}
+label {
+    display: block;
+    margin: 0.5rem 0;
+    cursor: pointer;
+}
+input[type="radio"] {
+    margin-right: 0.5rem;
+}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RelatiQuiz - Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="dark">
+    <div class="toggle-container">
+        <button id="theme-toggle">🌓</button>
+    </div>
+    <div class="glass">
+        <h1 class="text-gradient">Results</h1>
+        <p>You got {{ correct }} out of {{ total }} correct!</p>
+        <p>Time taken: {{ time }} seconds</p>
+        <p>Best streak: {{ streak }}</p>
+        <a href="/" class="btn">Back to Home</a>
+    </div>
+    <script src="/static/js/theme.js"></script>
+</body>
+</html>
