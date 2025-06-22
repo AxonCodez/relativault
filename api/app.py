@@ -50,7 +50,11 @@ def question_detail(qid):
     question = next((q for q in questions if q["id"] == qid), None)
     if not question:
         return "Question not found", 404
-    return render_template('question_detail.html', question=question)
+    # Find next question in the same subtopic
+    subtopic_questions = [q for q in questions if q["subtopic"] == question["subtopic"]]
+    current_index = next(i for i, q in enumerate(subtopic_questions) if q["id"] == qid)
+    next_id = subtopic_questions[current_index + 1]["id"] if current_index + 1 < len(subtopic_questions) else None
+    return render_template('question_detail.html', question=question, next_id=next_id)
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():

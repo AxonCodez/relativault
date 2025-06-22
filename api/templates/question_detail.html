@@ -91,6 +91,20 @@
         .back-link:hover {
             text-decoration: underline;
         }
+        .next-btn {
+            background: #2c3a4d;
+            color: #7eb6f8;
+            border: 2px solid #7eb6f8;
+            border-radius: 8px;
+            padding: 0.8rem 1.5rem;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            display: none;
+        }
+        .next-btn:hover {
+            background: #3a4a5d;
+        }
     </style>
 </head>
 <body>
@@ -108,11 +122,15 @@
             </div>
             {% endfor %}
         </div>
+        {% if next_id %}
+        <button id="next-btn" class="next-btn">Next Question &rarr;</button>
+        {% endif %}
         <span class="bookmark" title="Bookmark">&#9734;</span>
         <a href="{{ url_for('show_questions_by_subtopic', subtopic=question.subtopic.lower().replace(' ', '-')) }}" class="back-link">&larr; Back to {{ question.subtopic }}</a>
     </div>
     <script>
     const correctIndex = {{ question.answer }};
+    const nextBtn = document.getElementById('next-btn');
     document.querySelectorAll('.option-card').forEach(card => {
         card.addEventListener('click', function() {
             document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected', 'correct', 'incorrect'));
@@ -123,8 +141,14 @@
                 card.classList.add('incorrect');
                 document.querySelector('.option-card[data-index="'+correctIndex+'"]').classList.add('correct');
             }
+            if (nextBtn) nextBtn.style.display = 'block';
         });
     });
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
+            window.location.href = "/question/{{ next_id }}";
+        });
+    }
     </script>
     <script src="/static/js/theme.js"></script>
 </body>

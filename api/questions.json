@@ -9,19 +9,21 @@
       "Energy is quantized"
     ],
     "answer": 0,
-    "subtopic": "Relativistic Effects"
+    "subtopic": "Relativistic Effects",
+    "source": "JEE ADV 2025"
   },
   {
     "id": 2,
-    "text": "What is the famous equation from special relativity?",
+    "text": "According to special relativity, which quantity is invariant in all inertial frames?",
     "options": [
-      "F = ma",
-      "E = mc²",
-      "PV = nRT",
-      "V = IR"
+      "Speed of light",
+      "Length",
+      "Time interval",
+      "Mass"
     ],
-    "answer": 1,
-    "subtopic": "Relativistic Effects"
+    "answer": 0,
+    "subtopic": "Relativistic Effects",
+    "source": "JEE ADV 2025"
   },
   {
     "id": 3,
@@ -33,70 +35,24 @@
       "Time stops in a black hole"
     ],
     "answer": 0,
-    "subtopic": "Time Dilation"
+    "subtopic": "Time Dilation",
+    "source": "JEE ADV 2025"
   },
   {
     "id": 4,
-    "text": "What is the twin paradox?",
+    "text": "If a clock is moving at 0.8c relative to an observer, how much slower does it tick compared to the observer's clock?",
     "options": [
-      "A thought experiment about twins aging differently",
-      "A paradox about identical twins",
-      "A paradox about time travel",
-      "A paradox about space travel"
+      "0.6 times",
+      "0.8 times",
+      "0.5 times",
+      "0.4 times"
     ],
     "answer": 0,
-    "subtopic": "Twin Paradox"
+    "subtopic": "Time Dilation",
+    "source": "JEE ADV 2025"
   },
   {
     "id": 5,
-    "text": "What is the Lorentz transformation?",
-    "options": [
-      "A transformation between inertial frames",
-      "A transformation between gravitational fields",
-      "A transformation between electric and magnetic fields",
-      "A transformation between particles"
-    ],
-    "answer": 0,
-    "subtopic": "Lorentz Transformation"
-  },
-  {
-    "id": 6,
-    "text": "What is space-time?",
-    "options": [
-      "A four-dimensional continuum",
-      "A three-dimensional space",
-      "A two-dimensional plane",
-      "A one-dimensional line"
-    ],
-    "answer": 0,
-    "subtopic": "Space-Time"
-  },
-  {
-    "id": 7,
-    "text": "What are 4-vectors?",
-    "options": [
-      "Vectors with four components",
-      "Vectors with three components",
-      "Vectors with two components",
-      "Vectors with one component"
-    ],
-    "answer": 0,
-    "subtopic": "4 Vectors"
-  },
-  {
-    "id": 8,
-    "text": "What is relativistic momentum?",
-    "options": [
-      "Momentum that increases with velocity",
-      "Momentum that decreases with velocity",
-      "Momentum that is constant",
-      "Momentum that is zero"
-    ],
-    "answer": 0,
-    "subtopic": "Relativistic Momentum"
-  },
-  {
-    "id": 9,
     "text": "What is velocity transformation?",
     "options": [
       "A way to add velocities relativistically",
@@ -105,6 +61,150 @@
       "A way to divide velocities"
     ],
     "answer": 0,
-    "subtopic": "Velocity Transformation"
+    "subtopic": "Velocity Transformation",
+    "source": "JEE ADV 2025"
+  },
+  {
+    "id": 6,
+    "text": "If two particles are moving at 0.6c and 0.8c in the same direction, what is their relative velocity according to special relativity?",
+    "options": [
+      "Less than 0.2c",
+      "Exactly 0.2c",
+      "More than 0.2c",
+      "0.6c"
+    ],
+    "answer": 0,
+    "subtopic": "Velocity Transformation",
+    "source": "JEE ADV 2025"
+  },
+  {
+    "id": 7,
+    "text": "What is relativistic momentum?",
+    "options": [
+      "Momentum that increases with velocity",
+      "Momentum that decreases with velocity",
+      "Momentum that is constant",
+      "Momentum that is zero"
+    ],
+    "answer": 0,
+    "subtopic": "Relativistic Momentum",
+    "source": "JEE ADV 2025"
+  },
+  {
+    "id": 8,
+    "text": "As an object’s speed approaches the speed of light, its relativistic momentum:",
+    "options": [
+      "Increases without bound",
+      "Decreases to zero",
+      "Becomes negative",
+      "Remains constant"
+    ],
+    "answer": 0,
+    "subtopic": "Relativistic Momentum",
+    "source": "JEE ADV 2025"
+  },
+  {
+    "id": 9,
+    "text": "What is the Lorentz transformation?",
+    "options": [
+      "A transformation between inertial frames",
+      "A transformation between gravitational fields",
+      "A transformation between electric and magnetic fields",
+      "A transformation between particles"
+    ],
+    "answer": 0,
+    "subtopic": "Lorentz Transformation",
+    "source": "JEE ADV 2025"
+  },
+  {
+    "id": 10,
+    "text": "Which of the following is a property of the Lorentz transformation?",
+    "options": [
+      "Preserves the spacetime interval",
+      "Changes the speed of light",
+      "Makes time absolute",
+      "Makes length absolute"
+    ],
+    "answer": 0,
+    "subtopic": "Lorentz Transformation",
+    "source": "JEE ADV 2025"
+  },
+  {
+    "id": 11,
+    "text": "What is the twin paradox?",
+    "options": [
+      "A thought experiment about twins aging differently",
+      "A paradox about identical twins",
+      "A paradox about time travel",
+      "A paradox about space travel"
+    ],
+    "answer": 0,
+    "subtopic": "Twin Paradox",
+    "source": "JEE ADV 2025"
+  },
+  {
+    "id": 12,
+    "text": "In the twin paradox, which twin ages less?",
+    "options": [
+      "The twin that travels at high speed",
+      "The twin that stays on Earth",
+      "Both age the same",
+      "Neither twin ages"
+    ],
+    "answer": 0,
+    "subtopic": "Twin Paradox",
+    "source": "JEE ADV 2025"
+  },
+  {
+    "id": 13,
+    "text": "What is space-time?",
+    "options": [
+      "A four-dimensional continuum",
+      "A three-dimensional space",
+      "A two-dimensional plane",
+      "A one-dimensional line"
+    ],
+    "answer": 0,
+    "subtopic": "Space-Time",
+    "source": "JEE ADV 2025"
+  },
+  {
+    "id": 14,
+    "text": "Which of the following is a property of space-time in special relativity?",
+    "options": [
+      "It is absolute and unchanging",
+      "It is relative and depends on the observer",
+      "It is two-dimensional",
+      "It is not affected by motion"
+    ],
+    "answer": 1,
+    "subtopic": "Space-Time",
+    "source": "JEE ADV 2025"
+  },
+  {
+    "id": 15,
+    "text": "What are 4-vectors?",
+    "options": [
+      "Vectors with four components",
+      "Vectors with three components",
+      "Vectors with two components",
+      "Vectors with one component"
+    ],
+    "answer": 0,
+    "subtopic": "4 Vectors",
+    "source": "JEE ADV 2025"
+  },
+  {
+    "id": 16,
+    "text": "Which of the following is an example of a 4-vector?",
+    "options": [
+      "4-position",
+      "3-momentum",
+      "3-velocity",
+      "3-force"
+    ],
+    "answer": 0,
+    "subtopic": "4 Vectors",
+    "source": "JEE ADV 2025"
   }
 ]
