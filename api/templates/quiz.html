@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RelatiQuiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="dark">
+    <div class="toggle-container">
+        <button id="theme-toggle">🌓</button>
+    </div>
+    <div id="quiz-container" class="glass">
+        <h2 class="text-gradient">{{ question.text }}</h2>
+        <div id="options">
+            {% for option in question.options %}
+            <button class="option-btn ripple" onclick="submitAnswer({{ loop.index0 }})">{{ option }}</button>
+            {% endfor %}
+        </div>
+        <div class="timer-container">
+            <div class="timer-bar"></div>
+            <span id="timer">{{ question.time_limit }}</span>s
+        </div>
+        <div class="streak-container">
+            <span id="streak">{{ session.streak }}</span> streak
+        </div>
+    </div>
+    <script src="/static/js/timer.js"></script>
+    <script src="/static/js/theme.js"></script>
+    <script>
+    function submitAnswer(selected) {
+        clearInterval(window.timer);
+        fetch('/submit', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `qid={{ question.id }}&answer=${selected}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.next) window.location = `/quiz/${data.next}`;
+            else window.location = '/';
+        });
+    }
+    </script>
+</body>
+</html>

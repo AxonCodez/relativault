@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "text": "Which of the following is a postulate of special relativity?",
+    "options": [
+      "The speed of light is constant in all inertial frames",
+      "Time dilation does not occur",
+      "Gravity bends space-time",
+      "Energy is quantized"
+    ],
+    "answer": 0,
+    "time_limit": 30,
+    "category": "Special Relativity"
+  },
+  {
+    "id": 2,
+    "text": "What is the famous equation from special relativity?",
+    "options": [
+      "F = ma",
+      "E = mc²",
+      "PV = nRT",
+      "V = IR"
+    ],
+    "answer": 1,
+    "time_limit": 20,
+    "category": "Special Relativity"
+  }
+]
