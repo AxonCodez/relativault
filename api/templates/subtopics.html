@@ -1,47 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>RelatiQuiz - Subtopics</title>
+    <title>Subtopics | RelatiQuiz</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
     <style>
-        .card-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            margin-top: 2rem;
+        .subtopics-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: #181f28;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .subtopics-header {
+            background: #222c37;
+            color: #b2c9e2;
+            padding: 1.5rem;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        .subtopics-list {
+            padding: 0;
+            margin: 0;
         }
         .subtopic-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-            padding: 2rem;
-            min-width: 220px;
-            max-width: 260px;
-            text-align: left;
-            color: #fff;
-            position: relative;
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
+            display: block;
+            padding: 1.2rem 2rem;
+            color: #e6eaf0;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #29384b;
+            text-decoration: none;
+            transition: background 0.2s;
         }
         .subtopic-card:hover {
-            transform: translateY(-6px) scale(1.03);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+            background: #2a3545;
+        }
+        .subtopic-card:last-child {
+            border-bottom: none;
         }
         .subtopic-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-        .subtopic-title {
+            margin-right: 12px;
             font-size: 1.2rem;
-            font-weight: bold;
         }
-        .subtopic-count {
-            margin-top: 0.5rem;
-            color: #aaa;
-            font-size: 0.95rem;
+        .back-link {
+            display: inline-block;
+            margin: 1rem 0 0 2rem;
+            color: #7eb6f8;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -49,19 +59,30 @@
     <div class="toggle-container">
         <button id="theme-toggle">🌓</button>
     </div>
-    <div class="glass">
-        <h1 class="text-gradient">Choose a Subtopic</h1>
-        <div class="card-grid">
-            {% for sub in subtopics %}
-            <a href="{{ url_for('show_questions_by_subtopic', subtopic=sub.name.lower().replace(' ', '-')) }}" class="subtopic-card">
-                <span class="subtopic-icon">{{ sub.icon }}</span>
-                <span class="subtopic-title">{{ sub.name }}</span>
-                <div class="subtopic-count">{{ counts[sub.name] }} Qs</div>
-            </a>
+    <div class="subtopics-container">
+        <div class="subtopics-header">
+            Choose a Subtopic ({{ subtopics|length }})
+        </div>
+        <div class="subtopics-list">
+            {% for subtopic in subtopics %}
+                <a href="{{ url_for('show_questions_by_subtopic', subtopic=subtopic|lower|replace(' ', '-')) }}" class="subtopic-card">
+                    {% if subtopic == 'Relativistic Effects' %}⚡
+                    {% elif subtopic == 'Time Dilation' %}⏳
+                    {% elif subtopic == 'Velocity Transformation' %}🔄
+                    {% elif subtopic == 'Relativistic Momentum' %}🚀
+                    {% elif subtopic == 'Lorentz Transformation' %}🔁
+                    {% elif subtopic == 'Twin Paradox' %}👯
+                    {% elif subtopic == 'Space-Time' %}🌌
+                    {% elif subtopic == '4 Vectors' %}🔢
+                    {% endif %}
+                    <span>{{ subtopic }}</span>
+                </a>
+            {% else %}
+                <div class="subtopic-card">No subtopics found.</div>
             {% endfor %}
         </div>
-        <a href="/" class="btn" style="margin-top: 2rem;">Back to Home</a>
     </div>
+    <a href="/" class="back-link">&larr; Back to Home</a>
     <script src="/static/js/theme.js"></script>
 </body>
 </html>

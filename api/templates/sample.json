@@ -1,0 +1,13 @@
+INSERT INTO questions (text, options, answer, subtopic, source)
+VALUES (
+    'Which of the following is a postulate of special relativity?',
+    ARRAY[
+        'The speed of light is constant in all inertial frames',
+        'Time dilation does not occur',
+        'Gravity bends space-time',
+        'Energy is quantized'
+    ],
+    0,
+    'Relativistic Effects',
+    'JEE ADV 2025'
+);

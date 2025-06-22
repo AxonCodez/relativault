@@ -79,13 +79,13 @@ def subtopics():
 
 @app.route('/questions/<subtopic>')
 def show_questions_by_subtopic(subtopic):
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    normalized = subtopic.replace('-', ' ').lower()
+    normalized = subtopic.replace('-', ' ').strip().lower()
+    print(f"Normalized subtopic: {normalized}")  # Debug
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('SELECT * FROM questions WHERE subtopic = %s;', (normalized,))
+    cur.execute('SELECT * FROM questions WHERE subtopic ILIKE %s;', (normalized,))
     questions = cur.fetchall()
+    print(f"Found {len(questions)} questions for subtopic: {normalized}")  # Debug
     cur.close()
     conn.close()
     return render_template('questions_list.html', questions=[
@@ -124,6 +124,7 @@ def question_detail(qid):
         'subtopic': question[4],
         'source': question[5]
     }, next_id=next_id)
+
 
 @app.route('/add_question', methods=['GET', 'POST'])
 def add_question():

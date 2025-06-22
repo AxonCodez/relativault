@@ -40,6 +40,15 @@
             margin-right: 1rem;
             font-size: 1.1rem;
         }
+        .question-options {
+            margin-top: 0.8rem;
+            padding-left: 1rem;
+        }
+        .question-option {
+            color: #b2c9e2;
+            margin: 0.4rem 0;
+            display: block;
+        }
         .question-tag {
             display: inline-block;
             background: #2c3a4d;
@@ -63,6 +72,11 @@
         .back-link:hover {
             text-decoration: underline;
         }
+        .no-questions {
+            text-align: center;
+            font-style: italic;
+            padding: 2rem;
+        }
     </style>
 </head>
 <body class="dark">
@@ -75,17 +89,23 @@
         </div>
         <div class="question-list">
             {% for q in questions %}
-            <a href="{{ url_for('question_detail', qid=q.id) }}" class="question-card">
-                <span class="question-number">{{ "%02d"|format(loop.index) }}</span>
-                <span class="question-content">{{ q.text }}</span>
-                {% if q.source %}
-                    <div class="question-tag">{{ q.source }}</div>
-                {% endif %}
-            </a>
+                <a href="{{ url_for('question_detail', qid=q.id) }}" class="question-card">
+                    <span class="question-number">{{ "%02d"|format(loop.index) }}</span>
+                    <span class="question-content">{{ q.text }}</span>
+                    <div class="question-options">
+                        {% for opt in q.options %}
+                            <span class="question-option">{{ opt }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if q.source %}
+                        <div class="question-tag">{{ q.source }}</div>
+                    {% endif %}
+                </a>
+            {% else %}
+                <div class="question-card no-questions">
+                    No questions found for this subtopic.
+                </div>
             {% endfor %}
-            {% if questions|length == 0 %}
-            <div class="question-card">No questions found for this subtopic.</div>
-            {% endif %}
         </div>
         <a href="{{ url_for('subtopics') }}" class="back-link">&larr; Back to Subtopics</a>
     </div>
