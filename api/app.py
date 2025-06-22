@@ -65,13 +65,17 @@ def logout():
 def subtopics():
     if 'user' not in session:
         return redirect(url_for('login'))
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT DISTINCT subtopic FROM questions;')
-    subtopics = [row[0] for row in cur.fetchall()]
-    cur.close()
-    conn.close()
-    return render_template('subtopics.html', subtopics=subtopics)
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('SELECT DISTINCT subtopic FROM questions;')
+        subtopics = [row[0] for row in cur.fetchall()]
+        cur.close()
+        conn.close()
+        return render_template('subtopics.html', subtopics=subtopics)
+    except Exception as e:
+        print(f"Error in /subtopics: {e}")
+        return "Internal Server Error", 500
 
 @app.route('/questions/<subtopic>')
 def show_questions_by_subtopic(subtopic):
