@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register | RelatiQuiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="dark">
+    <div class="toggle-container">
+        <button id="theme-toggle">🌓</button>
+    </div>
+    <div class="glass">
+        <h1 class="text-gradient">Register</h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div style="color: #ff4d4d;">{{ messages[0] }}</div>
+            {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" class="btn">Register</button>
+        </form>
+        <a href="{{ url_for('login') }}" class="btn">Login</a>
+        <a href="/" class="btn">Back to Home</a>
+    </div>
+    <script src="/static/js/theme.js"></script>
+</body>
+</html>
