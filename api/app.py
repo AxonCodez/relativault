@@ -1,41 +1,18 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
-import json
+import psycopg2
 import os
-import time
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Load questions from JSON
-with open(os.path.join(os.path.dirname(__file__), 'questions.json'), 'r') as f:
-    questions = json.load(f)
-
-# Load users from JSON (create if not exists)
-USER_FILE = os.path.join(os.path.dirname(__file__), 'users.json')
-if not os.path.exists(USER_FILE):
-    with open(USER_FILE, 'w') as f:
-        json.dump([], f)
-with open(USER_FILE, 'r') as f:
-    users = json.load(f)
-
-# Subtopics with icons
-SUBTOPICS = [
-    {"name": "Relativistic Effects", "icon": "⚡"},
-    {"name": "Time Dilation", "icon": "⏳"},
-    {"name": "Velocity Transformation", "icon": "🔄"},
-    {"name": "Relativistic Momentum", "icon": "🚀"},
-    {"name": "Lorentz Transformation", "icon": "🔁"},
-    {"name": "Twin Paradox", "icon": "👯"},
-    {"name": "Space-Time", "icon": "🌌"},
-    {"name": "4 Vectors", "icon": "🔢"}
-]
-
-def get_subtopic_counts():
-    counts = {sub["name"]: 0 for sub in SUBTOPICS}
-    for q in questions:
-        if q.get("subtopic") in counts:
-            counts[q["subtopic"]] += 1
-    return counts
+def get_db_connection():
+    return psycopg2.connect(
+        host=os.getenv('POSTGRES_HOST'),
+        database=os.getenv('POSTGRES_DATABASE'),
+        user=os.getenv('POSTGRES_USER'),
+        password=os.getenv('POSTGRES_PASSWORD'),
+        port=os.getenv('POSTGRES_PORT')
+    )
 
 @app.route('/')
 def index():
@@ -47,7 +24,12 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = next((u for u in users if u['username'] == username and u['password'] == password), None)
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM users WHERE username = %s AND password = %s;', (username, password))
+        user = cur.fetchone()
+        cur.close()
+        conn.close()
         if user:
             session['user'] = username
             return redirect(url_for('index'))
@@ -60,14 +42,18 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if any(u['username'] == username for u in users):
-            flash('Username already exists')
-        else:
-            users.append({'username': username, 'password': password})
-            with open(USER_FILE, 'w') as f:
-                json.dump(users, f, indent=2)
+        conn = get_db_connection()
+        cur = conn.cursor()
+        try:
+            cur.execute('INSERT INTO users (username, password) VALUES (%s, %s);', (username, password))
+            conn.commit()
             session['user'] = username
             return redirect(url_for('index'))
+        except psycopg2.IntegrityError:
+            flash('Username already exists')
+        finally:
+            cur.close()
+            conn.close()
     return render_template('register.html')
 
 @app.route('/logout')
@@ -79,29 +65,93 @@ def logout():
 def subtopics():
     if 'user' not in session:
         return redirect(url_for('login'))
-    counts = get_subtopic_counts()
-    return render_template('subtopics.html', subtopics=SUBTOPICS, counts=counts)
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT DISTINCT subtopic FROM questions;')
+    subtopics = [row[0] for row in cur.fetchall()]
+    cur.close()
+    conn.close()
+    return render_template('subtopics.html', subtopics=subtopics)
 
 @app.route('/questions/<subtopic>')
 def show_questions_by_subtopic(subtopic):
     if 'user' not in session:
         return redirect(url_for('login'))
     normalized = subtopic.replace('-', ' ').lower()
-    filtered = [q for q in questions if q.get("subtopic", "").lower().replace('-', ' ') == normalized]
-    return render_template('questions_list.html', questions=filtered, subtopic=subtopic.title())
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM questions WHERE subtopic = %s;', (normalized,))
+    questions = cur.fetchall()
+    cur.close()
+    conn.close()
+    return render_template('questions_list.html', questions=[
+        {
+            'id': q[0],
+            'text': q[1],
+            'options': q[2],
+            'answer': q[3],
+            'subtopic': q[4],
+            'source': q[5]
+        } for q in questions
+    ], subtopic=subtopic.title())
 
 @app.route('/question/<int:qid>')
 def question_detail(qid):
     if 'user' not in session:
         return redirect(url_for('login'))
-    question = next((q for q in questions if q["id"] == qid), None)
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM questions WHERE id = %s;', (qid,))
+    question = cur.fetchone()
+    # Find next question in the same subtopic
+    cur.execute('SELECT id FROM questions WHERE subtopic = (SELECT subtopic FROM questions WHERE id = %s) ORDER BY id;', (qid,))
+    subtopic_questions = [row[0] for row in cur.fetchall()]
+    current_index = subtopic_questions.index(qid)
+    next_id = subtopic_questions[current_index + 1] if current_index + 1 < len(subtopic_questions) else None
+    cur.close()
+    conn.close()
     if not question:
         return "Question not found", 404
-    # Find next question in the same subtopic
-    subtopic_questions = [q for q in questions if q["subtopic"] == question["subtopic"]]
-    current_index = next(i for i, q in enumerate(subtopic_questions) if q["id"] == qid)
-    next_id = subtopic_questions[current_index + 1]["id"] if current_index + 1 < len(subtopic_questions) else None
-    return render_template('question_detail.html', question=question, next_id=next_id)
+    return render_template('question_detail.html', question={
+        'id': question[0],
+        'text': question[1],
+        'options': question[2],
+        'answer': question[3],
+        'subtopic': question[4],
+        'source': question[5]
+    }, next_id=next_id)
+
+@app.route('/add_question', methods=['GET', 'POST'])
+def add_question():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    # Admin-only access (replace 'admin' with your admin username if needed)
+    if session.get('user') != 'admin':
+        return redirect(url_for('index'))
+
+    if request.method == 'POST':
+        text = request.form['text']
+        options = request.form.getlist('options[]')
+        answer = int(request.form['answer'])
+        subtopic = request.form['subtopic']
+        source = request.form['source'] or None
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        try:
+            cur.execute(
+                'INSERT INTO questions (text, options, answer, subtopic, source) VALUES (%s, %s, %s, %s, %s);',
+                (text, options, answer, subtopic, source)
+            )
+            conn.commit()
+            flash('Question added successfully!', 'success')
+        except Exception as e:
+            flash('Error adding question: ' + str(e), 'error')
+        finally:
+            cur.close()
+            conn.close()
+        return redirect(url_for('add_question'))
+    return render_template('add_question.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
