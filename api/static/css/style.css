@@ -3,7 +3,7 @@ body {
     background: #121212;
     color: #f0f0f0;
     margin: 0;
-    padding: 0;
+    padding: 2rem;
     transition: background 0.3s;
 }
 body.light {
@@ -26,7 +26,7 @@ body.light {
     color: transparent;
     font-size: 1.5rem;
 }
-.option-btn {
+.btn, .option-btn {
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #f0f0f0;
@@ -36,8 +36,10 @@ body.light {
     width: 100%;
     cursor: pointer;
     transition: transform 0.2s, background 0.2s;
+    text-align: center;
+    display: block;
 }
-.option-btn:hover {
+.btn:hover, .option-btn:hover {
     transform: translateY(-2px);
     background: rgba(0, 0, 0, 0.4);
 }
@@ -84,4 +86,9 @@ body.light {
     position: fixed;
     top: 1rem;
     right: 1rem;
+}
+.streak-container {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    text-align: center;
 }

@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Quiz App</title>
+    <title>RelatiQuiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body>
-    <h1>Welcome to Quiz App</h1>
-    <div>Current Streak: {{ streak }}</div>
-    <a href="/quiz">Start Quiz</a>
-    <a href="/admin">Admin Panel</a>
+<body class="dark">
+    <div class="toggle-container">
+        <button id="theme-toggle">🌓</button>
+    </div>
+    <div class="glass">
+        <h1 class="text-gradient">RelatiQuiz</h1>
+        <div>Current Streak: {{ streak }}</div>
+        <a href="/quiz/1" class="btn">Start Quiz</a>
+        <a href="/admin" class="btn">Admin Panel</a>
+    </div>
+    <script src="/static/js/theme.js"></script>
 </body>
 </html>

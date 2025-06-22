@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, jsonify, session
 import json
 import os
 
@@ -40,20 +40,27 @@ def submit_answer():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if request.method == 'POST':
-        new_question = {
-            "id": len(questions) + 1,
-            "text": request.form['question'],
-            "options": [
-                request.form['opt1'],
-                request.form['opt2'],
-                request.form['opt3'],
-                request.form['opt4']
-            ],
-            "answer": int(request.form['correct']),
-            "time_limit": int(request.form['time_limit']),
-            "category": request.form['category']
-        }
-        questions.append(new_question)
-        with open('api/questions.json', 'w') as f:
-            json.dump(questions, f, indent=2)
+        try:
+            new_question = {
+                "id": len(questions) + 1,
+                "text": request.form['question'],
+                "options": [
+                    request.form['opt1'],
+                    request.form['opt2'],
+                    request.form['opt3'],
+                    request.form['opt4']
+                ],
+                "answer": int(request.form['correct']),
+                "time_limit": int(request.form['time_limit']),
+                "category": request.form['category']
+            }
+            questions.append(new_question)
+            with open(os.path.join(os.path.dirname(__file__), 'questions.json'), 'w') as f:
+                json.dump(questions, f, indent=2)
+        except Exception as e:
+            print(f"Error: {e}")
+            return "Bad Request", 400
     return render_template('admin.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
