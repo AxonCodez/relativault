@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RelatiQuiz - Subtopics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .card-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .subtopic-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+            padding: 2rem;
+            min-width: 220px;
+            max-width: 260px;
+            text-align: left;
+            color: #fff;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .subtopic-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+        }
+        .subtopic-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .subtopic-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .subtopic-count {
+            margin-top: 0.5rem;
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body class="dark">
+    <div class="toggle-container">
+        <button id="theme-toggle">🌓</button>
+    </div>
+    <div class="glass">
+        <h1 class="text-gradient">Choose a Subtopic</h1>
+        <div class="card-grid">
+            {% for sub in subtopics %}
+            <a href="{{ url_for('show_questions_by_subtopic', subtopic=sub.name.lower().replace(' ', '-')) }}" class="subtopic-card">
+                <span class="subtopic-icon">{{ sub.icon }}</span>
+                <span class="subtopic-title">{{ sub.name }}</span>
+                <div class="subtopic-count">{{ counts[sub.name] }} Qs</div>
+            </a>
+            {% endfor %}
+        </div>
+        <a href="/" class="btn" style="margin-top: 2rem;">Back to Home</a>
+    </div>
+    <script src="/static/js/theme.js"></script>
+</body>
+</html>

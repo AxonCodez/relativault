@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Q{{ question.id }} | RelatiQuiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body { background: #181f28; }
+        .q-container {
+            background: #222c37;
+            border-radius: 16px;
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 2rem 2rem 1.5rem 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+            color: #e6eaf0;
+        }
+        .q-meta {
+            color: #b2c9e2;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+        }
+        .q-source {
+            color: #7eb6f8;
+            font-size: 0.95rem;
+            margin-bottom: 1.1rem;
+        }
+        .q-text {
+            font-size: 1.15rem;
+            margin-bottom: 2rem;
+        }
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            justify-content: center;
+        }
+        .option-card {
+            flex: 1 1 40%;
+            min-width: 180px;
+            background: #232c3a;
+            border-radius: 12px;
+            padding: 1.2rem 1rem;
+            color: #e6eaf0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: background 0.2s, border 0.2s, color 0.2s;
+            position: relative;
+        }
+        .option-card.selected.correct {
+            background: #1e5136;
+            border-color: #2de37a;
+            color: #fff;
+        }
+        .option-card.selected.incorrect {
+            background: #5b2323;
+            border-color: #ff4d4d;
+            color: #fff;
+        }
+        .option-label {
+            background: #2c3a4d;
+            color: #7eb6f8;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            font-size: 1rem;
+        }
+        .bookmark {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            color: #ffcc00;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #7eb6f8;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="q-container">
+        <div class="q-meta">Q{{ question.id }}</div>
+        {% if question.source %}
+        <div class="q-source">{{ question.source }}</div>
+        {% endif %}
+        <div class="q-text">{{ question.text|safe }}</div>
+        <div class="options-grid">
+            {% for opt in question.options %}
+            <div class="option-card" data-index="{{ loop.index0 }}">
+                <span class="option-label">{{ 'ABCD'[loop.index0] }}</span>
+                {{ opt }}
+            </div>
+            {% endfor %}
+        </div>
+        <span class="bookmark" title="Bookmark">&#9734;</span>
+        <a href="{{ url_for('show_questions_by_subtopic', subtopic=question.subtopic.lower().replace(' ', '-')) }}" class="back-link">&larr; Back to {{ question.subtopic }}</a>
+    </div>
+    <script>
+    const correctIndex = {{ question.answer }};
+    document.querySelectorAll('.option-card').forEach(card => {
+        card.addEventListener('click', function() {
+            document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected', 'correct', 'incorrect'));
+            card.classList.add('selected');
+            if (parseInt(card.dataset.index) === correctIndex) {
+                card.classList.add('correct');
+            } else {
+                card.classList.add('incorrect');
+                document.querySelector('.option-card[data-index="'+correctIndex+'"]').classList.add('correct');
+            }
+        });
+    });
+    </script>
+    <script src="/static/js/theme.js"></script>
+</body>
+</html>

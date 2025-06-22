@@ -16,7 +16,7 @@ body.light {
     border-radius: 12px;
     padding: 2rem;
     margin: 2rem auto;
-    max-width: 600px;
+    max-width: 800px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 .text-gradient {
@@ -26,7 +26,7 @@ body.light {
     color: transparent;
     font-size: 1.5rem;
 }
-.btn, .option-btn {
+.btn {
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #f0f0f0;
@@ -39,74 +39,21 @@ body.light {
     text-align: center;
     display: block;
 }
-.btn:hover, .option-btn:hover {
+.btn:hover {
     transform: translateY(-2px);
     background: rgba(0, 0, 0, 0.4);
 }
-.ripple {
-    position: relative;
-    overflow: hidden;
-}
-.ripple:after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.5);
-    opacity: 0;
-    border-radius: 100%;
-    transform: scale(1, 1) translate(-50%);
-    transform-origin: 50% 50%;
-}
-.ripple:focus:not(:active)::after {
-    animation: ripple 1s ease-out;
-}
-@keyframes ripple {
-    0% { transform: scale(0, 0); opacity: 0.5; }
-    100% { transform: scale(20, 20); opacity: 0; }
-}
-.timer-container {
-    margin: 1rem 0;
-    position: relative;
-}
-.timer-bar {
-    height: 8px;
-    background: linear-gradient(90deg, #00dbde, #fc00ff);
-    border-radius: 4px;
+select, input[type="text"], input[type="number"] {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f0f0f0;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: 8px;
     width: 100%;
-    animation: timer linear {{ question.time_limit }}s;
-}
-@keyframes timer {
-    from { width: 100%; }
-    to { width: 0%; }
 }
 .toggle-container {
     position: fixed;
     top: 1rem;
     right: 1rem;
-}
-.streak-container {
-    font-size: 1.2rem;
-    margin-top: 1rem;
-    text-align: center;
-}
-
-.question {
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-}
-.question h3 {
-    margin-top: 0;
-}
-label {
-    display: block;
-    margin: 0.5rem 0;
-    cursor: pointer;
-}
-input[type="radio"] {
-    margin-right: 0.5rem;
 }

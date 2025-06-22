@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ subtopic }} - Questions | RelatiQuiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .questions-header {
+            background: #222c37;
+            color: #b2c9e2;
+            padding: 1rem 2rem;
+            border-radius: 10px 10px 0 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .question-list {
+            background: #181f28;
+            border-radius: 0 0 10px 10px;
+            padding: 0;
+            margin: 0;
+        }
+        .question-card {
+            border-bottom: 1px solid #29384b;
+            padding: 1.2rem 2rem;
+            color: #e6eaf0;
+            font-size: 1.1rem;
+            position: relative;
+            display: block;
+            text-decoration: none;
+        }
+        .question-card:hover {
+            background: #2a3545;
+        }
+        .question-card:last-child {
+            border-bottom: none;
+        }
+        .question-number {
+            color: #7eb6f8;
+            font-weight: bold;
+            margin-right: 1rem;
+            font-size: 1.1rem;
+        }
+        .question-tag {
+            display: inline-block;
+            background: #2c3a4d;
+            color: #7eb6f8;
+            border-radius: 6px;
+            padding: 0.2rem 0.7rem;
+            font-size: 0.9rem;
+            margin-top: 0.6rem;
+        }
+        .question-content {
+            margin-bottom: 0.5rem;
+            display: inline;
+        }
+        .back-link {
+            display: inline-block;
+            margin: 1rem 0 0 2rem;
+            color: #7eb6f8;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="dark">
+    <div class="toggle-container">
+        <button id="theme-toggle">🌓</button>
+    </div>
+    <div class="glass" style="max-width: 900px; margin: 2rem auto;">
+        <div class="questions-header">
+            All questions ({{ questions|length }}) — {{ subtopic }}
+        </div>
+        <div class="question-list">
+            {% for q in questions %}
+            <a href="{{ url_for('question_detail', qid=q.id) }}" class="question-card">
+                <span class="question-number">{{ "%02d"|format(loop.index) }}</span>
+                <span class="question-content">{{ q.text }}</span>
+                {% if q.source %}
+                    <div class="question-tag">{{ q.source }}</div>
+                {% endif %}
+            </a>
+            {% endfor %}
+            {% if questions|length == 0 %}
+            <div class="question-card">No questions found for this subtopic.</div>
+            {% endif %}
+        </div>
+        <a href="/subtopics" class="back-link">&larr; Back to Subtopics</a>
+    </div>
+    <script src="/static/js/theme.js"></script>
+</body>
+</html>

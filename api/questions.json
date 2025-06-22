@@ -9,8 +9,7 @@
       "Energy is quantized"
     ],
     "answer": 0,
-    "time_limit": 30,
-    "category": "Special Relativity"
+    "subtopic": "Relativistic Effects"
   },
   {
     "id": 2,
@@ -22,7 +21,90 @@
       "V = IR"
     ],
     "answer": 1,
-    "time_limit": 20,
-    "category": "Special Relativity"
+    "subtopic": "Relativistic Effects"
+  },
+  {
+    "id": 3,
+    "text": "What is time dilation?",
+    "options": [
+      "Time runs slower for moving observers",
+      "Time runs faster for moving observers",
+      "Time is absolute",
+      "Time stops in a black hole"
+    ],
+    "answer": 0,
+    "subtopic": "Time Dilation"
+  },
+  {
+    "id": 4,
+    "text": "What is the twin paradox?",
+    "options": [
+      "A thought experiment about twins aging differently",
+      "A paradox about identical twins",
+      "A paradox about time travel",
+      "A paradox about space travel"
+    ],
+    "answer": 0,
+    "subtopic": "Twin Paradox"
+  },
+  {
+    "id": 5,
+    "text": "What is the Lorentz transformation?",
+    "options": [
+      "A transformation between inertial frames",
+      "A transformation between gravitational fields",
+      "A transformation between electric and magnetic fields",
+      "A transformation between particles"
+    ],
+    "answer": 0,
+    "subtopic": "Lorentz Transformation"
+  },
+  {
+    "id": 6,
+    "text": "What is space-time?",
+    "options": [
+      "A four-dimensional continuum",
+      "A three-dimensional space",
+      "A two-dimensional plane",
+      "A one-dimensional line"
+    ],
+    "answer": 0,
+    "subtopic": "Space-Time"
+  },
+  {
+    "id": 7,
+    "text": "What are 4-vectors?",
+    "options": [
+      "Vectors with four components",
+      "Vectors with three components",
+      "Vectors with two components",
+      "Vectors with one component"
+    ],
+    "answer": 0,
+    "subtopic": "4 Vectors"
+  },
+  {
+    "id": 8,
+    "text": "What is relativistic momentum?",
+    "options": [
+      "Momentum that increases with velocity",
+      "Momentum that decreases with velocity",
+      "Momentum that is constant",
+      "Momentum that is zero"
+    ],
+    "answer": 0,
+    "subtopic": "Relativistic Momentum"
+  },
+  {
+    "id": 9,
+    "text": "What is velocity transformation?",
+    "options": [
+      "A way to add velocities relativistically",
+      "A way to subtract velocities",
+      "A way to multiply velocities",
+      "A way to divide velocities"
+    ],
+    "answer": 0,
+    "subtopic": "Velocity Transformation"
   }
 ]

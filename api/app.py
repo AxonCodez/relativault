@@ -10,46 +10,47 @@ app.secret_key = 'your_secret_key'
 with open(os.path.join(os.path.dirname(__file__), 'questions.json'), 'r') as f:
     questions = json.load(f)
 
+# Subtopics with icons
+SUBTOPICS = [
+    {"name": "Relativistic Effects", "icon": "⚡"},
+    {"name": "Time Dilation", "icon": "⏳"},
+    {"name": "Velocity Transformation", "icon": "🔄"},
+    {"name": "Relativistic Momentum", "icon": "🚀"},
+    {"name": "Lorentz Transformation", "icon": "🔁"},
+    {"name": "Twin Paradox", "icon": "👯"},
+    {"name": "Space-Time", "icon": "🌌"},
+    {"name": "4 Vectors", "icon": "🔢"}
+]
+
+def get_subtopic_counts():
+    counts = {sub["name"]: 0 for sub in SUBTOPICS}
+    for q in questions:
+        if q.get("subtopic") in counts:
+            counts[q["subtopic"]] += 1
+    return counts
+
 @app.route('/')
 def index():
     session['streak'] = session.get('streak', 0)
     return render_template('index.html', streak=session['streak'])
 
-@app.route('/questions')
-def show_questions():
-    session['start_time'] = time.time()  # Start the timer
-    session['answers'] = {}              # Store user answers
-    return render_template('questions.html', questions=questions)
+@app.route('/subtopics')
+def subtopics():
+    counts = get_subtopic_counts()
+    return render_template('subtopics.html', subtopics=SUBTOPICS, counts=counts)
 
-@app.route('/submit', methods=['POST'])
-def submit_answers():
-    end_time = time.time()
-    start_time = session.get('start_time', end_time)
-    total_time = int(end_time - start_time)
+@app.route('/questions/<subtopic>')
+def show_questions_by_subtopic(subtopic):
+    normalized = subtopic.replace('-', ' ').lower()
+    filtered = [q for q in questions if q.get("subtopic", "").lower().replace('-', ' ') == normalized]
+    return render_template('questions_list.html', questions=filtered, subtopic=subtopic.title())
 
-    user_answers = request.form.to_dict()
-    correct = 0
-    streak = 0
-    max_streak = 0
-
-    for qid, answer in user_answers.items():
-        qid = int(qid.replace('q', ''))
-        if qid <= len(questions):
-            question = questions[qid-1]
-            if int(answer) == question['answer']:
-                correct += 1
-                streak += 1
-                if streak > max_streak:
-                    max_streak = streak
-            else:
-                streak = 0
-
-    session['streak'] = max_streak
-    return render_template('results.html', 
-                          correct=correct, 
-                          total=len(questions),
-                          time=total_time,
-                          streak=max_streak)
+@app.route('/question/<int:qid>')
+def question_detail(qid):
+    question = next((q for q in questions if q["id"] == qid), None)
+    if not question:
+        return "Question not found", 404
+    return render_template('question_detail.html', question=question)
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
@@ -65,8 +66,8 @@ def admin():
                     request.form['opt4']
                 ],
                 "answer": int(request.form['correct']),
-                "time_limit": 0,  # Not used in this flow
-                "category": request.form['category']
+                "subtopic": request.form['subtopic'],
+                "source": request.form.get('source', '')
             }
             questions.append(new_question)
             with open(os.path.join(os.path.dirname(__file__), 'questions.json'), 'w') as f:

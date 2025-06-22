@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - RelatiQuiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="dark">
+    <div class="toggle-container">
+        <button id="theme-toggle">🌓</button>
+    </div>
+    <div class="glass">
+        <h1 class="text-gradient">Admin Panel</h1>
+        <form method="POST">
+            <input type="text" name="question" placeholder="Question" required>
+            <input type="text" name="opt1" placeholder="Option 1" required>
+            <input type="text" name="opt2" placeholder="Option 2" required>
+            <input type="text" name="opt3" placeholder="Option 3" required>
+            <input type="text" name="opt4" placeholder="Option 4" required>
+            <input type="number" name="correct" placeholder="Correct Option (0-3)" min="0" max="3" required>
+            <select name="subtopic" required>
+                <option value="">Select Subtopic</option>
+                <option>Relativistic Effects</option>
+                <option>Time Dilation</option>
+                <option>Velocity Transformation</option>
+                <option>Relativistic Momentum</option>
+                <option>Lorentz Transformation</option>
+                <option>Twin Paradox</option>
+                <option>Space-Time</option>
+                <option>4 Vectors</option>
+            </select>
+            <input type="text" name="source" placeholder="Source (optional)">
+            <button type="submit" class="btn">Add Question</button>
+        </form>
+        <a href="/" class="btn">Back to Home</a>
+    </div>
+    <script src="/static/js/theme.js"></script>
+</body>
+</html>
