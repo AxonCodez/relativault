@@ -3,72 +3,84 @@
 <head>
     <title>Add Question | RelatiQuiz</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
     <style>
-        .add-question-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        .add-question-form label {
-            margin-top: 0.5rem;
-        }
-        .add-question-form input, .add-question-form select {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        body {
+            background: #0a0e12;
             color: #e6eaf0;
-            padding: 0.8rem;
-            border-radius: 8px;
-            width: 100%;
+            font-family: 'Space Mono', monospace;
+            margin: 0;
+            padding: 2rem;
         }
-        .add-question-form textarea {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #181f28;
+            border-radius: 10px;
+            padding: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #b2c9e2;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            background: #222c37;
+            border: 1px solid #29384b;
+            border-radius: 4px;
             color: #e6eaf0;
-            padding: 0.8rem;
-            border-radius: 8px;
-            width: 100%;
-            min-height: 100px;
         }
-        .add-question-form button {
-            background: #2c3a4d;
-            color: #7eb6f8;
-            border: 2px solid #7eb6f8;
-            border-radius: 8px;
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
+        button {
+            background: #7eb6f8;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 0.75rem 1.5rem;
             cursor: pointer;
-            margin-top: 1rem;
+            font-size: 1rem;
         }
-        .add-question-form button:hover {
-            background: #3a4a5d;
+        button:hover {
+            background: #6aa7f0;
         }
     </style>
 </head>
-<body class="dark">
-    <div class="toggle-container">
-        <button id="theme-toggle">🌓</button>
-    </div>
-    <div class="glass">
-        <h1 class="text-gradient">Add Question</h1>
-        <form method="POST" class="add-question-form">
-            <label for="text">Question Text</label>
-            <textarea name="text" required></textarea>
-            <label>Options</label>
-            <input type="text" name="options[]" placeholder="Option 1" required>
-            <input type="text" name="options[]" placeholder="Option 2" required>
-            <input type="text" name="options[]" placeholder="Option 3" required>
-            <input type="text" name="options[]" placeholder="Option 4" required>
-            <label for="answer">Correct Option (0-3)</label>
-            <input type="number" name="answer" min="0" max="3" required>
-            <label for="subtopic">Subtopic</label>
-            <input type="text" name="subtopic" required>
-            <label for="source">Source (optional)</label>
-            <input type="text" name="source">
+<body>
+    <div class="form-container">
+        <h1>Add Question</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="text">Question Text</label>
+                <textarea id="text" name="text" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Options</label>
+                <input type="text" name="options[]" placeholder="Option 1" required>
+                <input type="text" name="options[]" placeholder="Option 2" required>
+                <input type="text" name="options[]" placeholder="Option 3" required>
+                <input type="text" name="options[]" placeholder="Option 4" required>
+            </div>
+            <div class="form-group">
+                <label for="answer">Correct Answer (0-3)</label>
+                <input type="number" id="answer" name="answer" min="0" max="3" required>
+            </div>
+            <div class="form-group">
+                <label for="subtopic">Subtopic</label>
+                <input type="text" id="subtopic" name="subtopic" required>
+            </div>
+            <div class="form-group">
+                <label for="source">Source (optional)</label>
+                <input type="text" id="source" name="source">
+            </div>
+            <div class="form-group">
+                <label for="image">Image (optional)</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
             <button type="submit">Add Question</button>
         </form>
-        <a href="/" class="btn" style="margin-top: 1rem;">Back to Home</a>
     </div>
-    <script src="/static/js/theme.js"></script>
 </body>
 </html>

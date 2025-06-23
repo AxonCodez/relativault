@@ -5,6 +5,18 @@ import os
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB limit
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 def get_db_connection():
     return psycopg2.connect(
         host=os.getenv('POSTGRES_HOST'),
@@ -126,37 +138,112 @@ def question_detail(qid):
     }, next_id=next_id)
 
 
+@app.route('/admin')
+def admin_panel():
+    if 'user' not in session or session.get('user') != 'admin':
+        return redirect(url_for('index'))
+
+    # Get all users (except admin)
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT username FROM users WHERE username != %s;', ('admin',))
+    users = [row[0] for row in cur.fetchall()]
+
+    # Get all questions
+    cur.execute('SELECT id, text, subtopic FROM questions;')
+    questions = cur.fetchall()
+
+    # Get all subtopics
+    cur.execute('SELECT DISTINCT subtopic FROM questions;')
+    subtopics = [row[0] for row in cur.fetchall()]
+    cur.close()
+    conn.close()
+
+    return render_template('admin.html', users=users, questions=questions, subtopics=subtopics)
+
+import traceback
+
 @app.route('/add_question', methods=['GET', 'POST'])
 def add_question():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    # Admin-only access (replace 'admin' with your admin username if needed)
-    if session.get('user') != 'admin':
+    if 'user' not in session or session.get('user') != 'admin':
         return redirect(url_for('index'))
 
     if request.method == 'POST':
-        text = request.form['text']
-        options = request.form.getlist('options[]')
-        answer = int(request.form['answer'])
-        subtopic = request.form['subtopic']
-        source = request.form['source'] or None
-
-        conn = get_db_connection()
-        cur = conn.cursor()
         try:
+            text = request.form['text']
+            options = request.form.getlist('options[]')
+            answer = int(request.form['answer'])
+            subtopic = request.form['subtopic']
+            source = request.form['source'] or None
+
+            image_filename = None
+            if 'image' in request.files:
+                file = request.files['image']
+                if file and file.filename != '' and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    upload_folder = app.config['UPLOAD_FOLDER']
+                    if not os.path.exists(upload_folder):
+                        os.makedirs(upload_folder)
+                    file.save(os.path.join(upload_folder, filename))
+                    image_filename = filename
+
+            conn = get_db_connection()
+            cur = conn.cursor()
             cur.execute(
-                'INSERT INTO questions (text, options, answer, subtopic, source) VALUES (%s, %s, %s, %s, %s);',
-                (text, options, answer, subtopic, source)
+                'INSERT INTO questions (text, options, answer, subtopic, source, image_filename) VALUES (%s, %s, %s, %s, %s, %s);',
+                (text, options, answer, subtopic, source, image_filename)
             )
             conn.commit()
             flash('Question added successfully!', 'success')
         except Exception as e:
             flash('Error adding question: ' + str(e), 'error')
+            print(traceback.format_exc())  # Print full traceback to console
         finally:
-            cur.close()
-            conn.close()
+            if 'cur' in locals(): cur.close()
+            if 'conn' in locals(): conn.close()
         return redirect(url_for('add_question'))
     return render_template('add_question.html')
+
+
+@app.route('/admin/delete_user/<username>', methods=['POST'])
+def delete_user(username):
+    if 'user' not in session or session.get('user') != 'admin':
+        return redirect(url_for('index'))
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('DELETE FROM users WHERE username = %s;', (username,))
+    conn.commit()
+    cur.close()
+    conn.close()
+    flash('User deleted successfully!', 'success')
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/delete_question/<int:qid>', methods=['POST'])
+def delete_question(qid):
+    if 'user' not in session or session.get('user') != 'admin':
+        return redirect(url_for('index'))
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('DELETE FROM questions WHERE id = %s;', (qid,))
+    conn.commit()
+    cur.close()
+    conn.close()
+    flash('Question deleted successfully!', 'success')
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/delete_subtopic/<subtopic>', methods=['POST'])
+def delete_subtopic(subtopic):
+    if 'user' not in session or session.get('user') != 'admin':
+        return redirect(url_for('index'))
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('DELETE FROM questions WHERE subtopic = %s;', (subtopic,))
+    conn.commit()
+    cur.close()
+    conn.close()
+    flash('Subtopic and its questions deleted successfully!', 'success')
+    return redirect(url_for('admin_panel'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
